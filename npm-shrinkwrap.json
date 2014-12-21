@@ -1,0 +1,40 @@
+{
+  "name": "spark-app",
+  "version": "0.0.0",
+  "dependencies": {
+    "node-static": {
+      "version": "0.7.6",
+      "from": "node-static@*",
+      "resolved": "https://registry.npmjs.org/node-static/-/node-static-0.7.6.tgz",
+      "dependencies": {
+        "optimist": {
+          "version": "0.6.1",
+          "from": "optimist@>=0.3.4",
+          "resolved": "https://registry.npmjs.org/optimist/-/optimist-0.6.1.tgz",
+          "dependencies": {
+            "wordwrap": {
+              "version": "0.0.2",
+              "from": "wordwrap@>=0.0.2 <0.1.0",
+              "resolved": "https://registry.npmjs.org/wordwrap/-/wordwrap-0.0.2.tgz"
+            },
+            "minimist": {
+              "version": "0.0.10",
+              "from": "minimist@>=0.0.1 <0.1.0",
+              "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.10.tgz"
+            }
+          }
+        },
+        "colors": {
+          "version": "1.0.3",
+          "from": "colors@>=0.6.0",
+          "resolved": "https://registry.npmjs.org/colors/-/colors-1.0.3.tgz"
+        },
+        "mime": {
+          "version": "1.2.11",
+          "from": "mime@>=1.2.9",
+          "resolved": "https://registry.npmjs.org/mime/-/mime-1.2.11.tgz"
+        }
+      }
+    }
+  }
+}
