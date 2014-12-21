@@ -5,4 +5,4 @@ sparkApp.github.io
 
 ## Things to run site:
 
-- (Node.JS)[http://nodejs.org/]
+- [Node.JS](http://nodejs.org)
