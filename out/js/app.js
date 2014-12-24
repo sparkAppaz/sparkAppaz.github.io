@@ -1,0 +1,1 @@
+!function(){var a=function(){function a(a,c){var d={url:a,route:c};b.push(d)}var b=[];return{addRoute:a,routes:b}}();window.router=a}();

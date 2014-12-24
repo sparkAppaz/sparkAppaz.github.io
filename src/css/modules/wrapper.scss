@@ -1,0 +1,10 @@
+/* Main phone Wrapper */
+
+#wrapper {
+	width: 320px;
+	margin: 100px auto;
+	border: 2px solid #ddd;
+	border-radius: 5px;
+	min-height: 450px;
+	@extend .whiteBg;
+}
