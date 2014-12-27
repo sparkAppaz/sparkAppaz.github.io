@@ -1,7 +1,25 @@
 (function () {
+	var view = document.querySelector("#view");
+
+	function get(url, cb) {
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", url, true);
+		xhr.send();
+
+		xhr.addEventListener("readystatechange", function (event) {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				cb(xhr.responseText);
+			}
+		});
+	}
 
 	var LinkFactory = (function () {
-		var linksArray = [];
+		var linksArray = [],
+				viewContainer;
+
+		function setViewContainer(viewContainerHTMLElem) {
+			viewContainer = viewContainerHTMLElem;
+		}
 
 		return {
 			// options { linkSelector: HTMLElem, gatherLinks: bool }
@@ -12,7 +30,7 @@
 					this.links = document.querySelectorAll(options.linkSelector);
 					// Make new link object
 					for (i = 0; i < this.links.length; i++) {
-						linksArray.push(new Link(this.links[i]));
+						linksArray.push(new ViewLink(this.links[i]));
 					}
 				}
 			},
@@ -23,47 +41,84 @@
 		};
 	})();
 
-	function Link(linkElem) {
+	function ViewLink(linkElem) {
 		this.elem = linkElem;
+		this.view = this.elem.href;
 		this.addClickListener();
 	}
 
-	Link.prototype =  {
+	ViewLink.prototype =  {
 		addClickListener: function () {
 			this.elem.addEventListener("click", function (event) {
-				console.log(this);
+				event.preventDefault();
+				history.pushState(null, null, this.view);
+				this.ajaxViewCall(this.view, view);
 			}.bind(this));
+		},
+
+		ajaxViewCall: function (url, viewElem) {
+			get(this.view, function (data) {
+				console.log(data);
+				viewElem.innerHTML = data;
+			});
 		}
 	};
 
-	var router = (function () {
-		var routes = [];
 
-		function initClickListener(routeObj) {
-			routeObj.link.addEventListener("click", function (event) {
-				console.log(routeObj);
+	var app = (function () {
+	
+		function popStateListener(options) {
+			window.addEventListener("popstate", function (event) {
+
+				get(location.pathname, function (data) {
+					view.innerHTML = data;
+					LinkFactory.init(options);
+				});
+			});
+		}
+
+		function loadInitView(initView, cb) {
+			get(initView, function (html) {
+				history.pushState(null, null, initView);
+
+				get(initView, function (html) {
+					view.innerHTML = html;
+					cb();
+				});
 			});
 		}
 
 		return {
-			// routeObj { url, view, link}
-			addRoute: function (routeObj) {
-				routes.push(routeObj);
-				initClickListener(routeObj);
+			init: function (options) {
+				this.options = options;
+				this.viewContainer = document.querySelector(options.viewContainer);
+
+				console.log(this.viewContainer);
+
+				loadInitView(options.initView, function () {
+					LinkFactory.init(options);
+				});
+				this.bindListeners();
 			},
 
-			getRoutes: function () {
-				return routes;
+			bindListeners: function () {
+				popStateListener(this.options);
 			}
 		};
+
 	})();
 
-	window.router = router;
+	// The code a user would run
+	(function () {
 
-	LinkFactory.init({ linkSelector: "a.link", gatherLinks: true });
-	var links = LinkFactory.getLinks();
-	console.log(links);
+		var options = {
+			linkSelector: "a.view-link", 
+			gatherLinks: true, 
+			initView: "/out/views/main.html",
+			viewContainer: "#view"
+		};
 
-
+		app.init(options);
+	})();
 
 })();

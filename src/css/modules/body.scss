@@ -7,3 +7,7 @@
 body {
 	background-color: $defaultBg;
 }
+
+ul {
+	@extends .no-style;
+}
