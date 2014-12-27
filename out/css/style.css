@@ -11,7 +11,7 @@
   color: white;
 }
 
-.no-style {
+.no-style, ul {
   list-style: none;
 }
 
@@ -23,10 +23,6 @@
 
 body {
   background-color: #ccc;
-}
-
-ul {
-  @extends .no-style;
 }
 
 /* Main phone Wrapper */

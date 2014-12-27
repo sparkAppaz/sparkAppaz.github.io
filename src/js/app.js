@@ -52,7 +52,11 @@
 			this.elem.addEventListener("click", function (event) {
 				event.preventDefault();
 				history.pushState(null, null, this.view);
-				this.ajaxViewCall(this.view, view);
+
+				if (location.pathname !== "/") {
+					this.ajaxViewCall(this.view, view);
+				}
+
 			}.bind(this));
 		},
 
@@ -69,18 +73,24 @@
 	
 		function popStateListener(options) {
 			window.addEventListener("popstate", function (event) {
+				console.log(location.pathname);
 
-				get(location.pathname, function (data) {
-					view.innerHTML = data;
-					LinkFactory.init(options);
-				});
+				if (location.pathname === "/") {
+					loadInitView(options.initView, function () {
+						LinkFactory.init(options);
+					});
+				} else {
+					get(location.pathname, function (data) {
+						view.innerHTML = data;
+						LinkFactory.init(options);
+					});
+				}
 			});
 		}
 
 		function loadInitView(initView, cb) {
 			get(initView, function (html) {
-				history.pushState(null, null, initView);
-
+				
 				get(initView, function (html) {
 					view.innerHTML = html;
 					cb();
