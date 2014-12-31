@@ -240,7 +240,7 @@
 				// gather the links once view is loaded
 				setTimeout(function () {
 					gatherViewLinks(this.opts.viewLink);
-				}.bind(this), 10);
+				}.bind(this), 100);
 			}
 		};
 
