@@ -19,7 +19,8 @@ module.exports = function(grunt) {
     uglify: {
       my_target: {
         files: {
-          'out/js/app.js': ['src/js/**/*.js', 'src/js/app.js'],
+          'out/js/app.js': [ 'src/js/script.js'],
+          'out/js/spark.js': [ 'src/js/spark.js' ]
         }
       }
     },
@@ -67,10 +68,6 @@ module.exports = function(grunt) {
         cmd: 'node server.js'
       },
 
-      deploy: {
-        cmd: 'git push origin master'
-      },
-
       test: {
         cmd: 'mocha'
       }
@@ -92,6 +89,6 @@ module.exports = function(grunt) {
   grunt.registerTask('css', ['sass']);
   grunt.registerTask('jsUg', ['uglify']);
   grunt.registerTask('test', ['exec:test']);
-  grunt.registerTask('deploy', ['exec:test', 'uglify', 'exec:deploy']);
+
   grunt.registerTask('run', ['css', 'uglify', 'exec:run']);
 };
