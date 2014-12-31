@@ -1,134 +1,261 @@
 (function () {
-	var view = document.querySelector("#view");
+	// TODO: add loaded custom event for view
+	// TODO: remove $pageChange event to $viewChange
+	// TODO: add IE fall back for location.origin line #122
+	// TODO: refactor and optimize
 
-	function get(url, cb) {
-		var xhr = new XMLHttpRequest();
-		xhr.open("GET", url, true);
-		xhr.send();
+	"use strict";
 
-		xhr.addEventListener("readystatechange", function (event) {
-			if (xhr.readyState === 4 && xhr.status === 200) {
-				cb(xhr.responseText);
-			}
-		});
+	/**
+	 * @author Matt Ludwigs
+	 * @date 12/30/14
+	 */
+
+	/**
+	 * Ajax class to abstract away from ajax calls
+	 *
+	 * @param method {String}
+	 * @param url {String}
+	 * @constructor
+	 */
+	function Ajax(method, url) {
+		this.method = method;
+		this.url = url;
 	}
 
-	var LinkFactory = (function () {
-		var linksArray = [],
-				viewContainer;
+	/**
+	 * Prototype for the Ajax Class
+	 *
+	 * @type {{Ajax}}
+	 */
+	Ajax.prototype = {
 
-		function setViewContainer(viewContainerHTMLElem) {
-			viewContainer = viewContainerHTMLElem;
-		}
+		/**
+		 * Send Ajax request and bind the event listener for response text.
+		 *
+		 * @param cb {Function}
+		 */
+		send: function (cb) {
+			this.xhr = new XMLHttpRequest();
 
-		return {
-			// options { linkSelector: HTMLElem, gatherLinks: bool }
-			init: function (options) {
-				var i;
-				if (options.gatherLinks) {
-					// gather links
-					this.links = document.querySelectorAll(options.linkSelector);
-					// Make new link object
-					for (i = 0; i < this.links.length; i++) {
-						linksArray.push(new ViewLink(this.links[i]));
-					}
-				}
-			},
+			this._addXhrListener(cb);
 
-			getLinks: function () {
-				return linksArray;
-			}
-		};
-	})();
-
-	function ViewLink(linkElem) {
-		this.elem = linkElem;
-		this.view = this.elem.href;
-		this.addClickListener();
-	}
-
-	ViewLink.prototype =  {
-		addClickListener: function () {
-			this.elem.addEventListener("click", function (event) {
-				event.preventDefault();
-				history.pushState(null, null, this.view);
-
-				if (location.pathname !== "/") {
-					this.ajaxViewCall(this.view, view);
-				}
-
-			}.bind(this));
+			this.xhr.open(this.method, this.url, true);
+			this.xhr.send();
 		},
 
-		ajaxViewCall: function (url, viewElem) {
-			get(this.view, function (data) {
-				console.log(data);
-				viewElem.innerHTML = data;
-			});
+		/**
+		 * Event listener for Ajax request. Calls callback when request is
+		 * ready.
+		 *
+		 * @param cb {Function}
+		 * @private
+		 */
+		_addXhrListener: function (cb) {
+			this.xhr.addEventListener("readystatechange", function () {
+				if (this.xhr.readyState === 4 && this.xhr.status === 200) {
+					if (this.xhr.responseURL.indexOf(".json") !== -1) {
+						cb(JSON.parse(this.xhr.responseText));
+					} else {
+						cb(this.xhr.responseText);
+					}
+				}
+			}.bind(this));
 		}
 	};
 
+	/**
+	 * Spark Object
+	 */
+	var spark = (function () {
 
-	var app = (function () {
-	
-		function popStateListener(options) {
-			window.addEventListener("popstate", function (event) {
-				console.log(location.pathname);
+		var linkElems = [],
+				options,
+				$pageChangeEvent = new CustomEvent("$pageChange");
 
-				if (location.pathname === "/") {
-					loadInitView(options.initView, function () {
-						LinkFactory.init(options);
-					});
-				} else {
-					get(location.pathname, function (data) {
-						view.innerHTML = data;
-						LinkFactory.init(options);
-					});
-				}
+
+		/**
+		 * When page originally loads run this and call the callback
+		 *
+		 * @param cb {Function}
+		 */
+		function loadEvent(cb) {
+			window.addEventListener("load", function () {
+				var hash = location.hash;
+				cb(hash);
 			});
 		}
 
-		function loadInitView(initView, cb) {
-			get(initView, function (html) {
-				
-				get(initView, function (html) {
-					view.innerHTML = html;
-					cb();
+		/**
+		 * Load the initial view if the page is
+		 * the "home" page
+		 *
+		 * @param viewPath {String}
+		 * @param viewContainer {HTMLElement}
+		 * @param linkSelector {String}
+		 */
+		function loadInitView(viewPath, viewContainer, linkSelector) {
+			var getView = new Ajax("GET", viewPath);
+			getView.send(function (data) {
+				viewContainer.innerHTML = data;
+				gatherViewLinks(linkSelector);
+			});
+		}
+
+
+		/**
+		 * Gather link views and story in array for latter use
+		 *
+		 * @param elemsSelector {String}
+		 */
+		function gatherViewLinks(elemsSelector) {
+			var i,
+					links;
+
+			linkElems = [];
+
+			links = document.querySelectorAll(elemsSelector);
+
+			for (i = 0; i < links.length; i++) {
+				linkElems.push(links[i]);
+				_linkClickListner(links[i]);
+			}
+		}
+
+		/**
+		 * Click event for the view links
+		 *
+		 * @param elem {HTMLElement}
+		 * @private
+		 */
+		function _linkClickListner(elem) {
+			elem.addEventListener("click", function (event) {
+				event.preventDefault();
+				document.dispatchEvent($pageChangeEvent);
+				if (location.origin) {
+					location.hash = elem.href.replace(location.origin, "");
+				}
+
+				loadView(location.hash);
+			});
+		}
+
+		/**
+		 * load view based off hash passed in
+		 *
+		 * @param locationHash {String}
+		 */
+		function loadView(locationHash) {
+			var currentHash = locationHash,
+					currentViewObj,
+					ajax,
+					i;
+			if (currentHash.indexOf("#") !== -1) {
+				currentHash = currentHash.replace("#", "");
+			}
+
+			for (i = 0; i < options.views.length; i++) {
+				if (options.views[i].url === currentHash) {
+					currentViewObj = options.views[i];
+					break;
+				}
+			}
+
+			if (currentViewObj) {
+				ajax = new Ajax("GET", currentViewObj.viewPath);
+				ajax.send(function (data) {
+					options.view.innerHTML = data;
 				});
+			}
+		}
+
+		/**
+		 * listener for custom $viewChange event
+		 *
+		 * @param cb {Function}
+		 */
+		function viewChangeListener(cb) {
+			document.addEventListener("$pageChange", function () {
+				cb();
 			});
 		}
 
 		return {
-			init: function (options) {
-				this.options = options;
-				this.viewContainer = document.querySelector(options.viewContainer);
+			/**
+			 * Initializer for the spark object
+			 *
+			 * @param opts {Object}
+			 *
+			 * @options view, initView, views, viewLink
+			 * @type view {HTMLElement}
+			 * @type initView {String}
+			 * @type viewLink {String}
+			 * @type views {Array<Object>}
+			 *
+			 */
+			init: function (opts) {
+				options = this.opts = opts;
+				loadEvent(function () {
+					var hash = location.hash;
 
-				console.log(this.viewContainer);
+					if (hash === "" ) {
+						loadInitView(this.opts.initView, this.opts.view, this.opts.viewLink);
+					} else {
+						this.$digest({ hash: hash });
+					}
 
-				loadInitView(options.initView, function () {
-					LinkFactory.init(options);
-				});
-				this.bindListeners();
+					viewChangeListener(function () {
+						this.$digest();
+					}.bind(this));
+
+				}.bind(this));
 			},
 
-			bindListeners: function () {
-				popStateListener(this.options);
+			/**
+			 *
+			 * @options {Object} [ hash ]
+			 *
+			 */
+			$digest: function () {
+				var _digest = {};
+				// If there are arguments do someting
+				if (arguments.length) {
+					var tempObj = arguments[0],
+							keys = Object.keys(tempObj),
+							i;
+					// loop through the keys add the value to _disget object
+					for (i = 0; i < keys.length; i++) {
+						// If hash is passed add it to the _disget object
+						if (keys[i].toLowerCase() === "hash") {
+							_digest.hash = tempObj.hash;
+						}
+					}
+				}
+
+				// if there is a hash, load the view for it
+				if (_digest.hash) {
+					loadView(_digest.hash);
+				}
+
+				// gather the links once view is loaded
+				setTimeout(function () {
+					gatherViewLinks(this.opts.viewLink);
+				}.bind(this), 10);
 			}
 		};
 
 	})();
 
-	// The code a user would run
-	(function () {
+	/**
+	 * Add Ajax to spark
+	 *
+	 * @type {Ajax}
+	 */
+	spark.Ajax = Ajax;
 
-		var options = {
-			linkSelector: "a.view-link", 
-			gatherLinks: true, 
-			initView: "/out/views/main.html",
-			viewContainer: "#view"
-		};
-
-		app.init(options);
-	})();
+	/**
+	 * Expose to window
+	 */
+	window.spark = spark;
 
 })();
