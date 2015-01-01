@@ -101,6 +101,21 @@ function removeExistingDistDir(distDir) {
   });
 }
 
+/**
+ * @param cssStartPath {String}
+ * @param cssFilePath {String}
+ */
+function cpCSS(cssStartPath, cssFilePathDist) {
+  childProcess.exec("cp " + cssStartPath + " " + cssFilePathDist, function (err, stdout, stderr) {
+    if (err) {
+      console.log(err);
+    }
+    console.log(stdout);
+
+    console.log("CSS:", cssFilePathDist, "was copied");
+  });
+}
+
 var viewCompiler = extend(new events.EventEmitter(), {
 
   /**
@@ -111,6 +126,7 @@ var viewCompiler = extend(new events.EventEmitter(), {
   init: function (opts) {
     this.opts = opts;
     setKeys(this.opts.views);
+
 
     fs.readdir(__dirname, function (err, files) {
       if (err) {
@@ -137,6 +153,8 @@ var viewCompiler = extend(new events.EventEmitter(), {
     for (i = 0; i < keys.length; i++) {
       fs.readFile(__dirname + keys[i], storeFileContents);
     }
+
+    cpCSS(__dirname + this.opts.css, __dirname + this.opts.dist + "/styles.css");
   },
 
   /**
@@ -172,6 +190,7 @@ var viewCompiler = extend(new events.EventEmitter(), {
 viewCompiler.init({
   layoutFile: "index.html",
   dist: "/examples",
+  css: "/out/css/style.css",
   views: {
     "/out/views/main.html": "/index.html",
     "/out/views/sitemap.html": "/design.html",

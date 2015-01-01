@@ -1,0 +1,86 @@
+/* Base Styles */
+.whiteBg, #wrapper {
+  background-color: white;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.colorWhite, header {
+  color: white;
+}
+
+.no-style, ul {
+  list-style: none;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+body {
+  background-color: #ccc;
+}
+
+a {
+  text-decoration: none;
+  color: #007482;
+  background-color: #eee;
+  display: block;
+  padding: 10px 10px;
+  -webkit-transition: background-color .2s;
+  -moz-transition: background-color .2s;
+  -ms-transition: background-color .2s;
+  -o-transition: background-color .2s;
+  transition: background-color .2s;
+  text-transform: capitalize;
+}
+a:hover {
+  background-color: #ccc;
+}
+
+h1 {
+  color: #4d4d4d;
+}
+h1 a {
+  background-color: #00bcd4;
+  color: black;
+  display: inline-block;
+}
+h1 a:hover {
+  background-color: #00bcd4;
+}
+
+/* Main phone Wrapper */
+#wrapper {
+  width: 320px;
+  margin: 100px auto;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  min-height: 450px;
+}
+
+/* Header Styles */
+header {
+  background-color: #00bcd4;
+  margin-bottom: 15px;
+}
+
+#view {
+  padding: 0 5px;
+}
+#view h1 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+#view p {
+  color: #aaa;
+  font-size: .9rem;
+  width: 98%;
+  margin-bottom: 10px;
+}
+
+/*# sourceMappingURL=style.css.map */
