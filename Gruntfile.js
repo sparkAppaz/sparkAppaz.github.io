@@ -91,7 +91,8 @@ module.exports = function(grunt) {
   grunt.registerTask('css', ['sass']);
   grunt.registerTask('jsUg', ['uglify']);
   grunt.registerTask('test', ['exec:test']);
+  grunt.registerTask('views', ['exec:views']);
 
-  grunt.registerTask('serve', ['exec:views', 'sass', 'uglify', 'jshint', 'develop', 'watch']);
+  grunt.registerTask('serve', ['sass', 'uglify', 'jshint', 'develop', 'watch']);
 
 };

@@ -1,7 +1,7 @@
 * {
 	padding: 0;
 	margin: 0;
-	font-family: san-serif;
+	font-family: sans-serif;
 }
 
 body {
@@ -10,4 +10,36 @@ body {
 
 ul {
 	@extend .no-style;
+}
+
+
+a {
+	text-decoration: none;
+	color: darken($mainBlue, 16%);
+	background-color: #eee;
+	display: block;
+	padding: 10px 10px;
+	-webkit-transition: background-color .2s;
+	-moz-transition: background-color .2s;
+	-ms-transition: background-color .2s;
+	-o-transition: background-color .2s;
+	transition: background-color .2s;
+	text-transform: capitalize;
+
+	&:hover {
+		background-color: #ccc;
+	}
+}
+
+h1 {
+	color: lighten(black, 30%);
+	a {
+		background-color: $mainBlue;
+		color: black;
+		display: inline-block;
+
+		&:hover {
+			background-color: $mainBlue;
+		}
+	}
 }
