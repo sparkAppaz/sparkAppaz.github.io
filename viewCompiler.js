@@ -10,6 +10,7 @@
 var fs = require("fs"),
     childProcess = require("child_process"),
     events = require("events"),
+    os = require("os").platform(),
     keys,
     layoutContent,
     viewsContent = [];
@@ -81,9 +82,18 @@ function writeFullHTML(content, dist) {
  * @param distDir {String}
  */
 function removeExistingDistDir(distDir) {
-  childProcess.exec("rm -rf " + __dirname + distDir, function (err) {
+  var command;
+
+  if (os.indexOf("win32") !== -1) {
+    command = "rmdir ";
+  } else {
+    command = "rm -rf ";
+  }
+
+  childProcess.exec(command + __dirname + distDir, function (err) {
     if (err) {
       console.log(err);
+      console.log("If you are a windows user you might need to manually delete your dist folder.");
     }
 
     console.log("[viewCompiler]: removing", distDir);
