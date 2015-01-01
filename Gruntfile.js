@@ -70,6 +70,10 @@ module.exports = function(grunt) {
 
       test: {
         cmd: 'mocha'
+      },
+
+      views: {
+        cmd: 'node viewCompiler.js'
       }
     }
   });
@@ -82,13 +86,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
 
 
-  grunt.registerTask('serve', ['sass', 'uglify', 'jshint', 'develop', 'watch']);
-
   grunt.registerTask('default', []);
   grunt.registerTask('hint', ['jshint']);
   grunt.registerTask('css', ['sass']);
   grunt.registerTask('jsUg', ['uglify']);
   grunt.registerTask('test', ['exec:test']);
 
-  grunt.registerTask('run', ['css', 'uglify', 'exec:run']);
+  grunt.registerTask('serve', ['exec:views', 'sass', 'uglify', 'jshint', 'develop', 'watch']);
+
 };

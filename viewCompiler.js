@@ -173,8 +173,9 @@ viewCompiler.init({
   layoutFile: "index.html",
   dist: "/examples",
   views: {
-    "/out/views/design.html": "/design.html",
-    "/out/views/content-wireframing.html": "/content-wireframing.html"
+    "/out/views/main.html": "/index.html",
+    "/out/views/sitemap.html": "/design.html",
+    "/out/views/design.html": "/sitemap.html"
   }
 });
 
