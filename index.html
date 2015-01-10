@@ -2,16 +2,20 @@
 <html>
 <head>
 	<title>Spark App</title>
-	<link rel="stylesheet" type="text/css" href="/out/css/style.css">
+	<!-- Style Sheets -->
+	<link rel="stylesheet" href="/out/css/style.css">
+	<link rel="stylesheet" href="/out/libs/font-awesome/css/font-awesome.min.css"/>
 </head>
 <body>
 	
 	<section>
 		<div id="wrapper">
+			<!-- Header where all views will share -->
 			<header>
-				<h1><a class="view-link" href="/home">Spark App App</a></h1>
+				<h1><a class="view-link" href="/home"><i class="fa fa-home"></i></a></h1>
 			</header>
 
+			<!-- This is the section where views are dynamically injected -->
 			<section id="view">
 				<!-- @content -->
 			</section>
@@ -23,8 +27,10 @@
 		<a href="http://localhost:3000">Refresh</a>
 	</div>
 
+	<!-- JS files -->
 	<script src="/out/js/spark.js"></script>
 
+	<!-- Initialize the spark framework -->
 	<script>
 
 		spark.init({

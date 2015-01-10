@@ -1,4 +1,7 @@
 {
-	"name": "spark-app",
-	"version": "0.0.0"
+  "name": "spark-app",
+  "version": "0.0.0",
+  "dependencies": {
+    "font-awesome": "~4.2.0"
+  }
 }
