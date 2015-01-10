@@ -4,4 +4,7 @@ header {
 	background-color: $mainBlue;
 	@extend .colorWhite;
 	margin-bottom: 15px;
+	-webkit-box-shadow: 0 0 3px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0 0 3px rgba(0,0,0,0.5);
+	box-shadow: 0 0 3px rgba(0,0,0,0.5);
 }

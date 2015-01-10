@@ -31,15 +31,28 @@ a {
   background-color: #eee;
   display: block;
   padding: 10px 10px;
-  -webkit-transition: background-color .2s;
-  -moz-transition: background-color .2s;
-  -ms-transition: background-color .2s;
-  -o-transition: background-color .2s;
-  transition: background-color .2s;
+  box-shadow: 0 0 3px transparent;
+  -webkit-transition: background-color .2s, box-shadow .2s;
+  -moz-transition: background-color .2s, box-shadow .2s;
+  -ms-transition: background-color .2s, box-shadow .2s;
+  -o-transition: background-color .2s, box-shadow .2s;
+  transition: background-color .2s, box-shadow .2s;
   text-transform: capitalize;
 }
 a:hover {
   background-color: #ccc;
+  box-shadow: 1px 0 3px rgba(0, 0, 0, 0.5);
+}
+a.no-box-shadow {
+  -webkit-transition: color .3s;
+  -moz-transition: color .3s;
+  -ms-transition: color .3s;
+  -o-transition: color .3s;
+  transition: color .3s;
+}
+a.no-box-shadow:hover {
+  box-shadow: 0 0 0 transparent;
+  color: white;
 }
 
 h1 {
@@ -58,15 +71,23 @@ h1 a:hover {
 #wrapper {
   width: 320px;
   margin: 100px auto;
-  border: 2px solid #ddd;
+  border: 5px solid #363636;
   border-radius: 5px;
   min-height: 450px;
+}
+@media (max-width: 450px) {
+  #wrapper {
+    width: 80%;
+  }
 }
 
 /* Header Styles */
 header {
   background-color: #00bcd4;
   margin-bottom: 15px;
+  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
 
 #view {
