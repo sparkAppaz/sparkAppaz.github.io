@@ -54,12 +54,13 @@
 		 * @private
 		 */
 		_addXhrListener: function (cb) {
+			var self = this;
 			this.xhr.addEventListener("readystatechange", function () {
-				if (this.xhr.readyState === 4 && this.xhr.status === 200) {
-					if (this.xhr.responseURL.indexOf(".json") !== -1) {
-						cb(JSON.parse(this.xhr.responseText));
+				if (self.readyState === 4 && self.status === 200) {
+					if (self.responseURL.indexOf(".json") !== -1) {
+						cb(JSON.parse(self.responseText));
 					} else {
-						cb(this.xhr.responseText);
+						cb(self.responseText);
 					}
 				}
 			}.bind(this));
