@@ -198,9 +198,6 @@
 			 */
 			init: function (opts) {
 				options = this.opts = opts;
-
-				this.viewContainer = opts.view;
-				console.log(this);
 				loadEvent(function () {
 					var hash = location.hash;
 
