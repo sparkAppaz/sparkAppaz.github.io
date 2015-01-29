@@ -21,8 +21,6 @@
 	function Ajax(method, url) {
 		this.method = method;
 		this.url = url;
-
-		console.log(this);
 	}
 
 	/**
@@ -54,15 +52,17 @@
 		 * @private
 		 */
 		_addXhrListener: function (cb) {
-			var self = this;
 			this.xhr.addEventListener("readystatechange", function () {
-				if (self.readyState === 4 && self.status === 200) {
-					if (self.responseURL.indexOf(".json") !== -1) {
-						cb(JSON.parse(self.responseText));
-					} else {
-						cb(self.responseText);
-					}
+				if (this.xhr.readyState === 4 && this.xhr.status === 200) {
+					cb(this.xhr.responseText);
 				}
+				//if (this.xhr.readyState === 4 && this.xhr.status === 200) {
+				//	if (this.xhr.responseURL.indexOf(".json") !== -1) {
+				//		cb(JSON.parse(this.xhr.responseText));
+				//	} else {
+				//		cb(this.xhr.responseText);
+				//	}
+				//}
 			}.bind(this));
 		}
 	};

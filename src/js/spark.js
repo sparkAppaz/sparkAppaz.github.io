@@ -54,12 +54,15 @@
 		_addXhrListener: function (cb) {
 			this.xhr.addEventListener("readystatechange", function () {
 				if (this.xhr.readyState === 4 && this.xhr.status === 200) {
-					if (this.xhr.responseURL.indexOf(".json") !== -1) {
-						cb(JSON.parse(this.xhr.responseText));
-					} else {
-						cb(this.xhr.responseText);
-					}
+					cb(this.xhr.responseText);
 				}
+				//if (this.xhr.readyState === 4 && this.xhr.status === 200) {
+				//	if (this.xhr.responseURL.indexOf(".json") !== -1) {
+				//		cb(JSON.parse(this.xhr.responseText));
+				//	} else {
+				//		cb(this.xhr.responseText);
+				//	}
+				//}
 			}.bind(this));
 		}
 	};
