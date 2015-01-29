@@ -21,6 +21,8 @@
 	function Ajax(method, url) {
 		this.method = method;
 		this.url = url;
+
+		console.log(this);
 	}
 
 	/**
