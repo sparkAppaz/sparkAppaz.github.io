@@ -1,8 +1,8 @@
-/* Base Styles */
+@import "common/fonts";
 @import "common/variables";
-@import "common/classes";
-// Main Styles
-@import "modules/body";
+@import "common/base";
+
 @import "modules/wrapper";
 @import "modules/header";
 @import "modules/views";
+
