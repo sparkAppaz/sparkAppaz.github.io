@@ -41,7 +41,6 @@ a {
   text-transform: capitalize;
   border: thin solid white;
 }
-
 a:hover {
   background-color: #51aacf;
   color: white;
@@ -51,7 +50,6 @@ h1 {
   color: #51aacf;
   font-family: 'Lobster', cursive;
 }
-
 h1 a {
   background-color: #51aacf;
   color: white;
@@ -59,7 +57,6 @@ h1 a {
   border: none;
   font-size: 1.25em;
 }
-
 h1 a:hover {
   background-color: #51aacf;
 }
