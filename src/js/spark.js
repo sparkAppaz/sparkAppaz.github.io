@@ -1,264 +1,265 @@
+
 (function () {
-	// TODO: add loaded custom event for view
-	// TODO: remove $pageChange event to $viewChange
-	// TODO: add IE fall back for location.origin line #122
-	// TODO: refactor and optimize
+  // TODO: add loaded custom event for view
+  // TODO: remove $pageChange event to $viewChange
+  // TODO: add IE fall back for location.origin line #122
+  // TODO: refactor and optimize
 
-	"use strict";
+  "use strict";
 
-	/**
-	 * @author Matt Ludwigs
-	 * @date 12/30/14
-	 */
+  /**
+   * @author Matt Ludwigs
+   * @date 12/30/14
+   */
 
-	/**
-	 * Ajax class to abstract away from ajax calls
-	 *
-	 * @param method {String}
-	 * @param url {String}
-	 * @constructor
-	 */
-	function Ajax(method, url) {
-		this.method = method;
-		this.url = url;
-	}
+  /**
+   * Ajax class to abstract away from ajax calls
+   *
+   * @param method {String}
+   * @param url {String}
+   * @constructor
+   */
+  function Ajax(method, url) {
+    this.method = method;
+    this.url = url;
+  }
 
-	/**
-	 * Prototype for the Ajax Class
-	 *
-	 * @type {{Ajax}}
-	 */
-	Ajax.prototype = {
+  /**
+   * Prototype for the Ajax Class
+   *
+   * @type {{Ajax}}
+   */
+  Ajax.prototype = {
 
-		/**
-		 * Send Ajax request and bind the event listener for response text.
-		 *
-		 * @param cb {Function}
-		 */
-		send: function (cb) {
-			this.xhr = new XMLHttpRequest();
+    /**
+     * Send Ajax request and bind the event listener for response text.
+     *
+     * @param cb {Function}
+     */
+    send: function (cb) {
+      this.xhr = new XMLHttpRequest();
 
-			this._addXhrListener(cb);
+      this._addXhrListener(cb);
 
-			this.xhr.open(this.method, this.url, true);
-			this.xhr.send();
-		},
+      this.xhr.open(this.method, this.url, true);
+      this.xhr.send();
+    },
 
-		/**
-		 * Event listener for Ajax request. Calls callback when request is
-		 * ready.
-		 *
-		 * @param cb {Function}
-		 * @private
-		 */
-		_addXhrListener: function (cb) {
-			this.xhr.addEventListener("readystatechange", function () {
-				if (this.xhr.readyState === 4 && this.xhr.status === 200) {
-					cb(this.xhr.responseText);
-				}
-				//if (this.xhr.readyState === 4 && this.xhr.status === 200) {
-				//	if (this.xhr.responseURL.indexOf(".json") !== -1) {
-				//		cb(JSON.parse(this.xhr.responseText));
-				//	} else {
-				//		cb(this.xhr.responseText);
-				//	}
-				//}
-			}.bind(this));
-		}
-	};
+    /**
+     * Event listener for Ajax request. Calls callback when request is
+     * ready.
+     *
+     * @param cb {Function}
+     * @private
+     */
+    _addXhrListener: function (cb) {
+      this.xhr.addEventListener("readystatechange", function () {
+        if (this.xhr.readyState === 4 && this.xhr.status === 200) {
+          cb(this.xhr.responseText);
+        }
+        //if (this.xhr.readyState === 4 && this.xhr.status === 200) {
+        //	if (this.xhr.responseURL.indexOf(".json") !== -1) {
+        //		cb(JSON.parse(this.xhr.responseText));
+        //	} else {
+        //		cb(this.xhr.responseText);
+        //	}
+        //}
+      }.bind(this));
+    }
+  };
 
-	/**
-	 * Spark Object
-	 */
-	var spark = (function () {
+  /**
+   * Spark Object
+   */
+  var spark = (function () {
 
-		var linkElems = [],
-				options,
-				$pageChangeEvent = new CustomEvent("$pageChange");
-
-
-		/**
-		 * When page originally loads run this and call the callback
-		 *
-		 * @param cb {Function}
-		 */
-		function loadEvent(cb) {
-			window.addEventListener("load", function () {
-				var hash = location.hash;
-				cb(hash);
-			});
-		}
-
-		/**
-		 * Load the initial view if the page is
-		 * the "home" page
-		 *
-		 * @param viewPath {String}
-		 * @param viewContainer {HTMLElement}
-		 * @param linkSelector {String}
-		 */
-		function loadInitView(viewPath, viewContainer, linkSelector) {
-			var getView = new Ajax("GET", viewPath);
-			getView.send(function (data) {
-				viewContainer.innerHTML = data;
-				gatherViewLinks(linkSelector);
-			});
-		}
+    var linkElems = [],
+      options,
+      $pageChangeEvent = new CustomEvent("$pageChange");
 
 
-		/**
-		 * Gather link views and story in array for latter use
-		 *
-		 * @param elemsSelector {String}
-		 */
-		function gatherViewLinks(elemsSelector) {
-			var i,
-					links;
+    /**
+     * When page originally loads run this and call the callback
+     *
+     * @param cb {Function}
+     */
+    function loadEvent(cb) {
+      window.addEventListener("load", function () {
+        var hash = location.hash;
+        cb(hash);
+      });
+    }
 
-			linkElems = [];
+    /**
+     * Load the initial view if the page is
+     * the "home" page
+     *
+     * @param viewPath {String}
+     * @param viewContainer {HTMLElement}
+     * @param linkSelector {String}
+     */
+    function loadInitView(viewPath, viewContainer, linkSelector) {
+      var getView = new Ajax("GET", viewPath);
+      getView.send(function (data) {
+        viewContainer.innerHTML = data;
+        gatherViewLinks(linkSelector);
+      });
+    }
 
-			links = document.querySelectorAll(elemsSelector);
 
-			for (i = 0; i < links.length; i++) {
-				linkElems.push(links[i]);
-				_linkClickListner(links[i]);
-			}
-		}
+    /**
+     * Gather link views and story in array for latter use
+     *
+     * @param elemsSelector {String}
+     */
+    function gatherViewLinks(elemsSelector) {
+      var i,
+        links;
 
-		/**
-		 * Click event for the view links
-		 *
-		 * @param elem {HTMLElement}
-		 * @private
-		 */
-		function _linkClickListner(elem) {
-			elem.addEventListener("click", function (event) {
-				event.preventDefault();
-				document.dispatchEvent($pageChangeEvent);
-				if (location.origin) {
-					location.hash = elem.href.replace(location.origin, "");
-				}
+      linkElems = [];
 
-				loadView(location.hash);
-			});
-		}
+      links = document.querySelectorAll(elemsSelector);
 
-		/**
-		 * load view based off hash passed in
-		 *
-		 * @param locationHash {String}
-		 */
-		function loadView(locationHash) {
-			var currentHash = locationHash,
-					currentViewObj,
-					ajax,
-					i;
-			if (currentHash.indexOf("#") !== -1) {
-				currentHash = currentHash.replace("#", "");
-			}
+      for (i = 0; i < links.length; i++) {
+        linkElems.push(links[i]);
+        _linkClickListner(links[i]);
+      }
+    }
 
-			for (i = 0; i < options.views.length; i++) {
-				if (options.views[i].url === currentHash) {
-					currentViewObj = options.views[i];
-					break;
-				}
-			}
+    /**
+     * Click event for the view links
+     *
+     * @param elem {HTMLElement}
+     * @private
+     */
+    function _linkClickListner(elem) {
+      elem.addEventListener("click", function (event) {
+        event.preventDefault();
+        document.dispatchEvent($pageChangeEvent);
+        if (location.origin) {
+          location.hash = elem.href.replace(location.origin, "");
+        }
 
-			if (currentViewObj) {
-				ajax = new Ajax("GET", currentViewObj.viewPath);
-				ajax.send(function (data) {
-					options.view.innerHTML = data;
-				});
-			}
-		}
+        loadView(location.hash);
+      });
+    }
 
-		/**
-		 * listener for custom $viewChange event
-		 *
-		 * @param cb {Function}
-		 */
-		function viewChangeListener(cb) {
-			document.addEventListener("$pageChange", function () {
-				cb();
-			});
-		}
+    /**
+     * load view based off hash passed in
+     *
+     * @param locationHash {String}
+     */
+    function loadView(locationHash) {
+      var currentHash = locationHash,
+        currentViewObj,
+        ajax,
+        i;
+      if (currentHash.indexOf("#") !== -1) {
+        currentHash = currentHash.replace("#", "");
+      }
 
-		return {
-			/**
-			 * Initializer for the spark object
-			 *
-			 * @param opts {Object}
-			 *
-			 * @options view, initView, views, viewLink
-			 * @type view {HTMLElement}
-			 * @type initView {String}
-			 * @type viewLink {String}
-			 * @type views {Array<Object>}
-			 *
-			 */
-			init: function (opts) {
-				options = this.opts = opts;
-				loadEvent(function () {
-					var hash = location.hash;
+      for (i = 0; i < options.views.length; i++) {
+        if (options.views[i].url === currentHash) {
+          currentViewObj = options.views[i];
+          break;
+        }
+      }
 
-					if (hash === "" ) {
-						loadInitView(this.opts.initView, this.opts.view, this.opts.viewLink);
-					} else {
-						this.$digest({ hash: hash });
-					}
+      if (currentViewObj) {
+        ajax = new Ajax("GET", currentViewObj.viewPath);
+        ajax.send(function (data) {
+          options.view.innerHTML = data;
+        });
+      }
+    }
 
-					viewChangeListener(function () {
-						this.$digest();
-					}.bind(this));
+    /**
+     * listener for custom $viewChange event
+     *
+     * @param cb {Function}
+     */
+    function viewChangeListener(cb) {
+      document.addEventListener("$pageChange", function () {
+        cb();
+      });
+    }
 
-				}.bind(this));
-			},
+    return {
+      /**
+       * Initializer for the spark object
+       *
+       * @param opts {Object}
+       *
+       * @options view, initView, views, viewLink
+       * @type view {HTMLElement}
+       * @type initView {String}
+       * @type viewLink {String}
+       * @type views {Array<Object>}
+       *
+       */
+      init: function (opts) {
+        options = this.opts = opts;
+        loadEvent(function () {
+          var hash = location.hash;
 
-			/**
-			 *
-			 * @options {Object} [ hash ]
-			 *
-			 */
-			$digest: function () {
-				var _digest = {};
-				// If there are arguments do someting
-				if (arguments.length) {
-					var tempObj = arguments[0],
-							keys = Object.keys(tempObj),
-							i;
-					// loop through the keys add the value to _disget object
-					for (i = 0; i < keys.length; i++) {
-						// If hash is passed add it to the _disget object
-						if (keys[i].toLowerCase() === "hash") {
-							_digest.hash = tempObj.hash;
-						}
-					}
-				}
+          if (hash === "" ) {
+            loadInitView(this.opts.initView, this.opts.view, this.opts.viewLink);
+          } else {
+            this.$digest({ hash: hash });
+          }
 
-				// if there is a hash, load the view for it
-				if (_digest.hash) {
-					loadView(_digest.hash);
-				}
+          viewChangeListener(function () {
+            this.$digest();
+          }.bind(this));
 
-				// gather the links once view is loaded
-				setTimeout(function () {
-					gatherViewLinks(this.opts.viewLink);
-				}.bind(this), 100);
-			}
-		};
+        }.bind(this));
+      },
 
-	})();
+      /**
+       *
+       * @options {Object} [ hash ]
+       *
+       */
+      $digest: function () {
+        var _digest = {};
+        // If there are arguments do someting
+        if (arguments.length) {
+          var tempObj = arguments[0],
+            keys = Object.keys(tempObj),
+            i;
+          // loop through the keys add the value to _disget object
+          for (i = 0; i < keys.length; i++) {
+            // If hash is passed add it to the _disget object
+            if (keys[i].toLowerCase() === "hash") {
+              _digest.hash = tempObj.hash;
+            }
+          }
+        }
 
-	/**
-	 * Add Ajax to spark
-	 *
-	 * @type {Ajax}
-	 */
-	spark.Ajax = Ajax;
+        // if there is a hash, load the view for it
+        if (_digest.hash) {
+          loadView(_digest.hash);
+        }
 
-	/**
-	 * Expose to window
-	 */
-	window.spark = spark;
+        // gather the links once view is loaded
+        setTimeout(function () {
+          gatherViewLinks(this.opts.viewLink);
+        }.bind(this), 100);
+      }
+    };
+
+  })();
+
+  /**
+   * Add Ajax to spark
+   *
+   * @type {Ajax}
+   */
+  spark.Ajax = Ajax;
+
+  /**
+   * Expose to window
+   */
+  window.spark = spark;
 
 })();

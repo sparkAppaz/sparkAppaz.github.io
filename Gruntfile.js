@@ -10,8 +10,7 @@ module.exports = function(grunt) {
           style: 'expanded'
         },
         files: {
-          'out/css/style.css': 'src/css/main.scss',
-          'out/css/ie.css' : 'src/css/ie.scss'
+          'out/css/style.css': 'src/css/main.scss'
         }
       }
     },

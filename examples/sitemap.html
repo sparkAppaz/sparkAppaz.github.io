@@ -5,51 +5,31 @@
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-	
-	<section>
-		<div id="wrapper">
-			<header>
-				<h1><a class="view-link" href="index.html">Spark App App</a></h1>
-			</header>
 
-			<section id="view">
-				<h1>Sitemap/Wireframing</h1>
+<section>
+	<div id="wrapper">
+		<header>
+			<h1><a class="view-link" href="index.html">Spark App App</a></h1>
+		</header>
 
-				<p>Sitemap and wireframing are a very important of any site or app information architecture.</p>
+		<section id="view">
+			<h1>Sitemap/Wireframing</h1>
 
-				<ul>
-					<li><a href="https://balsamiq.com/">Balsamiq</a></li>
-					<li><a href="http://www.siteground.com/tutorials/sitemap/">Sitemap Tutorial</a></li>
-				</ul>
-			</section>
+			<p>Check out the many sitemap and wireframing tools available. Some are free and some have free trial periods.</p>
 
-		</div>
-	</section>
-
-	<!-- TODO: need to work on -->
-	<div class="app-reload">
-		<a href="http://localhost:3000">Refresh</a>
+			<ul>
+				<li><a href="http://mashable.com/2010/07/15/wireframing-tools/">10 Free Wireframing Tools for Designers</a></li>
+				<li><a href="https://www.omnigroup.com/omnigraffle">OmniGraffle</a></li>
+				<li><a href="http://creately.com/diagram-type/site-map">Draw Sitemaps Online and Easily Visualize Your Website Structure</a></li>
+			</ul>
+		</section>
 	</div>
+</section>
 
-	<script src="/out/js/spark.js"></script>
-
-	<script>
-
-		spark.init({
-			view: document.querySelector("#view"),
-			viewLink: ".view-link",
-			initView: "/out/views/main.html",
-
-			views: [
-				{ url: "/home", viewPath: "/out/views/main.html" },
-				{ url: "/content", viewPath: "/out/views/content.html" },
-				{ url: "/design", viewPath: "/out/views/design.html" },
-				{ url: "/code", viewPath: "/out/views/code.html" },
-				{ url: "/sitemap", viewPath: "/out/views/sitemap.html" }
-			]
-		});
-
-	</script>
+<!-- TODO: need to work on -->
+<div class="app-reload">
+	<a href="index.html">Refresh</a>
+</div>
 
 </body>
 </html>
