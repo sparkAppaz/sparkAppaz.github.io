@@ -38,23 +38,28 @@ a {
   transition: background-color .2s;
   text-transform: capitalize;
   border: thin solid rgb(255, 255, 255);
+
+  &:hover {
+    background-color: $blue;
+    color: white;
+  }
 }
-a:hover {
-  background-color: $blue;
-  color: white;
-}
+
+
 
 h1 {
   color: $blue;
   font-family: 'Lobster', cursive;
-}
-h1 a {
-  background-color: $blue;
-  color: white;
-  display: inline-block;
-  border: none;
-  font-size:1.25em;
-}
-h1 a:hover {
-  background-color: $blue;
+
+  a {
+    background-color: $blue;
+    color: white;
+    display: inline-block;
+    border: none;
+    font-size:1.25em;
+
+    &:hover {
+      background-color: $blue;
+    }
+  }
 }
