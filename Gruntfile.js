@@ -15,15 +15,6 @@ module.exports = function(grunt) {
       }
     },
 
-    uglify: {
-      my_target: {
-        files: {
-          'out/js/app.js': [ 'src/js/script.js'],
-          'out/js/spark.js': [ 'src/js/spark.js' ]
-        }
-      }
-    },
-
     watch: {
       options: {
         livereload: true
@@ -35,16 +26,9 @@ module.exports = function(grunt) {
           nospwan: true
         }
       },
-      js: {
-        files: ["src/js/*.js", "src/js/**/*.js"],
-        tasks: ["uglify"],
-        options: {
-          nospwan: true
-        }
-      },
 
       jshint: {
-        files: ["src/js/*.js", "src/js/**/*.js"],
+        files: ['out/js/*.js'],
         tasks: ["jshint"],
         options: {
           nospwan: true
@@ -59,27 +43,18 @@ module.exports = function(grunt) {
     },
 
     jshint: {
-      myFiles: ['src/js/*.js', 'src/js/**/*.js']
+      myFiles: ['out/js/*.js']
     },
 
     exec: {
       run: {
         cmd: 'node server.js'
-      },
-
-      test: {
-        cmd: 'mocha'
-      },
-
-      views: {
-        cmd: 'node viewCompiler.js'
       }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-exec');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-develop');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -88,10 +63,8 @@ module.exports = function(grunt) {
   grunt.registerTask('default', []);
   grunt.registerTask('hint', ['jshint']);
   grunt.registerTask('css', ['sass']);
-  grunt.registerTask('jsUg', ['uglify']);
-  grunt.registerTask('test', ['exec:test']);
-  grunt.registerTask('views', ['exec:views']);
 
-  grunt.registerTask('serve', ['sass', 'uglify', 'jshint', 'develop', 'watch']);
+
+  grunt.registerTask('serve', ['sass', 'jshint', 'develop', 'watch']);
 
 };

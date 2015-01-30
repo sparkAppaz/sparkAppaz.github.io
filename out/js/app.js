@@ -1,1 +1,33 @@
-!function(){"use strict";function a(a,b){this.method=a,this.url=b}a.prototype={send:function(a){this.xhr=new XMLHttpRequest,this._addXhrListener(a),this.xhr.open(this.method,this.url,!0),this.xhr.send()},_addXhrListener:function(a){this.xhr.addEventListener("readystatechange",function(){4===this.xhr.readyState&&200===this.xhr.status&&a(-1!==this.xhr.responseURL.indexOf(".json")?JSON.parse(this.xhr.responseText):this.xhr.responseText)}.bind(this))}};var b=function(){function b(a){window.addEventListener("load",function(){var b=location.hash;a(b)})}function c(b,c,e){var f=new a("GET",b);f.send(function(a){c.innerHTML=a,d(e)})}function d(a){var b,c;for(i=[],c=document.querySelectorAll(a),b=0;b<c.length;b++)i.push(c[b]),e(c[b])}function e(a){a.addEventListener("click",function(b){b.preventDefault(),document.dispatchEvent(j),location.origin&&(location.hash=a.href.replace(location.origin,"")),f(location.hash)})}function f(b){var c,d,e,f=b;for(-1!==f.indexOf("#")&&(f=f.replace("#","")),e=0;e<h.views.length;e++)if(h.views[e].url===f){c=h.views[e];break}c&&(d=new a("GET",c.viewPath),d.send(function(a){h.view.innerHTML=a}))}function g(a){document.addEventListener("$pageChange",function(){a()})}var h,i=[],j=new CustomEvent("$pageChange");return{init:function(a){h=this.opts=a,b(function(){var a=location.hash;""===a?c(this.opts.initView,this.opts.view,this.opts.viewLink):this.$digest({hash:a}),g(function(){this.$digest()}.bind(this))}.bind(this))},$digest:function(){var a={};if(arguments.length){var b,c=arguments[0],e=Object.keys(c);for(b=0;b<e.length;b++)"hash"===e[b].toLowerCase()&&(a.hash=c.hash)}a.hash&&f(a.hash),setTimeout(function(){d(this.opts.viewLink)}.bind(this),100)}}}();b.Ajax=a,window.spark=b}();
+var app = angular.module("SparkApp", ['ngRoute']);
+
+
+app.config(["$routeProvider", function ($routeProvider) {
+
+  $routeProvider
+    .when("/", {
+      templateUrl: "/out/views/main.html"
+    })
+    .when("/content", {
+      templateUrl: "/out/views/content.html"
+    })
+    .when("/code", {
+      templateUrl: "/out/views/code.html"
+    })
+    .when("/sitemap", {
+      templateUrl: "/out/views/sitemap.html"
+    })
+    .when("/videos", {
+      templateUrl: "/out/views/videos.html"
+    })
+    .when("/launch", {
+      templateUrl: "/out/views/launch.html"
+    })
+    .when("/design", {
+      templateUrl: "/out/views/design.html"
+    })
+    .otherwise({
+      redirectTo: "/"
+    });
+
+}]);
+

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="SparkApp">
 <head>
 	<title>Spark App</title>
 	<!-- Style Sheets -->
@@ -12,13 +12,11 @@
 		<div id="wrapper">
 			<!-- Header where all views will share -->
 			<header>
-				<h1><a class="view-link no-box-shadow" href="/home"><i class="fa fa-home"></i></a></h1>
+				<h1><a class="view-link no-box-shadow" href="#/"><i class="fa fa-home"></i></a></h1>
 			</header>
 
 			<!-- This is the section where views are dynamically injected -->
-			<section id="view">
-				<!-- @content -->
-			</section>
+			<section ng-view id="view"></section>
 		</div>
 	</section>
 
@@ -27,29 +25,11 @@
 		<a href="http://localhost:3000">Refresh</a>
 	</div>
 
-	<!-- JS files -->
-	<script src="/out/js/spark.js"></script>
 
-	<!-- Initialize the spark framework -->
-	<script>
+	<script src="/out/libs/angular/angular.min.js"></script>
+	<script src="/out/libs/angular-route/angular-route.min.js"></script>
+	<script src="/out/js/app.js"></script>
 
-		spark.init({
-			view: document.querySelector("#view"),
-			viewLink: ".view-link",
-			initView: "/out/views/main.html",
-
-			views: [
-				{ url: "/home", viewPath: "/out/views/main.html" },
-				{ url: "/content", viewPath: "/out/views/content.html" },
-				{ url: "/design", viewPath: "/out/views/design.html" },
-				{ url: "/sitemap", viewPath: "/out/views/sitemap.html" },
-				{ url: "/code", viewPath: "/out/views/code.html" },
-				{ url: "/videos", viewPath: "/out/views/videos.html"},
-				{ url: "/launch", viewPath: "/out/views/launch.html"}
-			]
-		});
-
-	</script>
 
 </body>
 </html>
