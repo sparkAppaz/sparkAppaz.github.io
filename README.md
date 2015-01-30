@@ -3,10 +3,12 @@
 ## Site should be located at:
 sparkAppaz.github.io
 
-## Things needed to run site:
+## Things needed to run/build site:
 
 - [Node.JS](http://nodejs.org)
 - [Grunt](http://gruntjs.com/getting-started)
+- [Ruby](https://www.ruby-lang.org/en/)
+- [SASS](http://sass-lang.com/)
 
 ## Build the project
 
